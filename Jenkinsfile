@@ -27,4 +27,4 @@ pipeline {
                     tags: 'copy_files'
             }
         }
-        
+}
