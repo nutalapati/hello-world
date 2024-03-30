@@ -1,0 +1,2 @@
+src_dir: "/var/lib/jenkins/workspace/deploy/"
+dest_dir: "/opt/tomcat/webapps/"
