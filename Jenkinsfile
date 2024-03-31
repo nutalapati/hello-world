@@ -1,31 +1,27 @@
 pipeline {
     agent any
+
     stages {
-        stage("SCM Code Pull") {
+        stage('Checkout') {
             steps {
-                git branch: 'master',                        
-                    url: 'https://github.com/nutalapati/hello-world.git'                
-                }
-            }  
-                   
-        stage("Build") {
-            steps {
-                sh "/opt/maven/mvn clean"          
-                               
+                // Checkout code from GitHub repository
+                git 'https://github.com/nutalapati/hello-world.git'
             }
         }
         
-        stage("copy files") {
+        stage('Build') {
             steps {
-                ansiblePlaybook become: true,
-                    credentialsId: '8bdbf9c4-93b2-4d0f-a32e-364a1ba48d03',
-                    disableHostKeyChecking: true, 
-                    installation: 'ansible', 
-                    inventory: 'hello-world/inventories/dev.inv', 
-                    limit: 'jenkinsServer', 
-                    playbook: 'hello-world/appDeploy.yml',
-                    tags: 'copy_files'
+                // Build the Maven project
+                sh 'mvn clean package'
             }
         }
-    }    
+        
+        stage('Deploy to Tomcat') {
+            steps {
+                // Copy the WAR file to Tomcat webapps directory
+                sh 'scp target/*.war deployer@34.222.9.185:/opt/tomcat/webapps/'
+            }
+        }
+    }
 }
+
