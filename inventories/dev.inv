@@ -1,2 +1,0 @@
-[jenkinsServer]
-34.222.9.185 ansible_user=ec2-user
